@@ -95,6 +95,17 @@ public class AndroidDevice implements Comparable<AndroidDevice> {
 		shellCommand(String.format(Locale.ENGLISH, "input tap %.3f %.3f", p.getX(), p.getY()));
 	}
 
+	public void swipe(Point from, Point to, Long duration)
+	{
+		shellCommand(
+			String.format(Locale.ENGLISH, "input swipe %.3f %.3f %.3f %.3f %d",
+				from.getX(), from.getY(),
+				to.getX(), to.getY(),
+				duration
+			)
+		);
+	}
+
 	public void key(String key)
 	{
 		shellCommand(String.format(Locale.ENGLISH, "input keyevent %s", key));
