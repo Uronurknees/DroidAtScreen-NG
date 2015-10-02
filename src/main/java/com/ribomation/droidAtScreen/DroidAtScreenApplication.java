@@ -12,6 +12,14 @@
 
 package com.ribomation.droidAtScreen;
 
+import com.ribomation.droidAtScreen.cmd.AdbExePathCommand;
+import com.ribomation.droidAtScreen.cmd.Command;
+import com.ribomation.droidAtScreen.dev.AndroidDevice;
+import com.ribomation.droidAtScreen.dev.AndroidDeviceListener;
+import com.ribomation.droidAtScreen.dev.AndroidDeviceManager;
+import com.ribomation.droidAtScreen.gui.ApplicationFrame;
+import com.ribomation.droidAtScreen.gui.DeviceFrame;
+import com.ribomation.droidAtScreen.gui.DeviceTableModel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -25,19 +33,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
-
 import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
-
-import com.ribomation.droidAtScreen.cmd.AdbExePathCommand;
-import com.ribomation.droidAtScreen.cmd.Command;
-import com.ribomation.droidAtScreen.dev.AndroidDevice;
-import com.ribomation.droidAtScreen.dev.AndroidDeviceListener;
-import com.ribomation.droidAtScreen.dev.AndroidDeviceManager;
-import com.ribomation.droidAtScreen.gui.ApplicationFrame;
-import com.ribomation.droidAtScreen.gui.DeviceFrame;
-import com.ribomation.droidAtScreen.gui.DeviceTableModel;
 
 /**
  * Main entry point of this application
@@ -72,14 +69,13 @@ public class DroidAtScreenApplication implements Application, AndroidDeviceListe
 
 	private void initProperties() {
 		log.debug("initProperties");
-		InputStream is = this.getClass().getResourceAsStream("/app.properties");
-		if (is != null) {
-			try {
-				appProperties = new Properties();
-				appProperties.load(is);
-			} catch (IOException e) {
-				log.debug("Missing classpath resource: /app.properties", e);
-			}
+		try(InputStream is = this.getClass().getResourceAsStream("/app.properties")) {
+			appProperties = new Properties();
+			appProperties.load(is);
+		}
+		catch (IOException ex)
+		{
+			log.debug("Missing classpath resource: /app.properties", ex);
 		}
 
 		settings = new Settings();
